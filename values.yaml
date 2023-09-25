@@ -74,7 +74,12 @@ smtp:
 
   podAnnotations: {}
 
-  podLabels: {}
+  podLabels:
+    app: bouchon-smtp
+    env: ovh
+    tier: bouchon
+    criticality: low
+    component: smtp
 
   extraEnv: []
 
