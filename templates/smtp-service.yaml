@@ -1,0 +1,28 @@
+{{- if .Values.smtp.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mailhog.fullname" . }}
+  {{- with .Values.smtp.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "mailhog.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: ClusterIP
+  ports:
+    {{- $httpPortName := .Values.smtp.containerPort.http.name }}
+    {{- $smtpPortName := .Values.smtp.containerPort.smtp.name }}
+    - name: {{ $httpPortName }}
+      port: {{ .Values.smtp.service.port.http }}
+      protocol: TCP
+      targetPort: {{- if .Values.smtp.service.namedTargetPort }} {{ $httpPortName }} {{- else }} {{ .Values.smtp.containerPort.http.port }} {{- end }}
+    - name: {{ $smtpPortName }}
+      port: {{ .Values.smtp.service.port.smtp }}
+      protocol: TCP
+      targetPort: {{- if .Values.smtp.service.namedTargetPort }} {{ $smtpPortName }} {{- else }} {{ .Values.smtp.containerPort.smtp.port }} {{- end }}
+  selector:
+    {{- include "mailhog.selectorLabels" . | nindent 4 }}
+{{- end -}}

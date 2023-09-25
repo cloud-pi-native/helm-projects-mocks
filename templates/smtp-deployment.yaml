@@ -1,0 +1,108 @@
+{{- if .Values.smtp.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mailhog.fullname" . }}
+  labels:
+    {{- include "mailhog.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.smtp.podReplicas }}
+  selector:
+    matchLabels:
+      {{- include "mailhog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.smtp.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mailhog.selectorLabels" . | nindent 8 }}
+        {{- with .Values.smtp.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "mailhog.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.smtp.automountServiceAccountToken }}
+      {{- with .Values.smtp.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ template "mailhog.name" . }}
+          image: "{{ .Values.smtp.image.repository }}:{{ .Values.smtp.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: "{{ .Values.smtp.image.pullPolicy }}"
+          env:
+            {{- $vars := list }}
+            {{- range .Values.extraEnv }}
+            {{- $vars = append $vars .name }}
+            {{- end }}
+            {{- if not (has "MH_HOSTNAME" $vars) }}
+            - name: MH_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- end }}
+            {{- if .Values.smtp.auth.enabled }}
+            - name: MH_AUTH_FILE
+              value: /authdir/{{ .Values.smtp.auth.fileName }}
+            {{- end }}
+            {{- if .Values.smtp.outgoingSMTP.enabled }}
+            - name: MH_OUTGOING_SMTP
+              value: /config/{{ .Values.smtp.outgoingSMTP.fileName }}
+            {{- end }}
+            {{- with .Values.smtp.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: {{ .Values.smtp.containerPort.http.name }}
+              containerPort: {{ .Values.smtp.containerPort.http.port }}
+              protocol: TCP
+            - name: {{ .Values.smtp.containerPort.smtp.name }}
+              containerPort: {{ .Values.smtp.containerPort.smtp.port }}
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.smtp.containerPort.smtp.port }}
+          {{- if .Values.smtp.livenessProbe }}
+          {{- toYaml .Values.smtp.livenessProbe | nindent 12 }}
+          {{- end }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.smtp.containerPort.smtp.port }}
+          {{- if .Values.smtp.readinessProbe }}
+            {{- toYaml .Values.smtp.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.smtp.auth.enabled .Values.smtp.outgoingSMTP.enabled }}
+          volumeMounts:
+            {{- if .Values.smtp.auth.enabled }}
+            - name: authdir
+              mountPath: /authdir
+              readOnly: true
+            {{- end }}
+            {{- if .Values.smtp.outgoingSMTP.enabled }}
+            - name: outsmtpdir
+              mountPath: /config
+              readOnly: true
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.smtp.resources | nindent 12 }}
+      {{- with .Values.smtp.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.smtp.auth.enabled .Values.smtp.outgoingSMTP.enabled }}
+      volumes:
+        {{- if .Values.smtp.auth.enabled }}
+        - name: authdir
+          secret:
+            secretName: {{ template "mailhog.authFileSecret" . }}
+        {{- end }}
+        {{- if .Values.smtp.outgoingSMTP.enabled }}
+        - name: outsmtpdir
+          secret:
+            secretName: {{ template "mailhog.outgoingSMTPSecret" . }}
+        {{- end }}
+      {{- end }}
+{{- end -}}

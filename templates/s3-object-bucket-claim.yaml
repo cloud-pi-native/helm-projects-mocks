@@ -1,0 +1,11 @@
+{{- if .Values.s3.enabled -}}
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: {{ .Values.s3.bucketName }}
+spec:
+  additionalConfig:
+    bucketclass: {{ .Values.s3.bucketclass }}
+  generateBucketName: {{ .Values.s3.bucketName }}
+  storageClassName: {{ .Values.s3.storageClassName }}
+{{- end -}}
