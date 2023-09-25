@@ -10,7 +10,7 @@ smtp:
   # Référence vers l'image mailhog sur docker.io
   image:
     repository: docker.io/mailhog/mailhog
-    tag: "latest"
+    tag: "v1.0.1"
     pullPolicy: IfNotPresent
 
   nameOverride: ""
