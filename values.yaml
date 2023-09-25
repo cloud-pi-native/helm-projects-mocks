@@ -46,7 +46,7 @@ smtp:
     enabled: true
     existingSecret: ""
     fileName: auth.txt
-    fileContents: "bob:$apr1$fida8u0r$tRk5QjKylDfCDoPNbF3191"
+    fileContents: "bob:$2a$04$Q7Upvd/YIprNCpLlPzECeeFvkVR5EXJlmnf6xKNtdyWJrhyma5Hei" # bcrypt format: MailHog bcrypt my-password
 
   # JSON file defining outgoing SMTP servers
   outgoingSMTP:
