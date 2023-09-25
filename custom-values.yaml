@@ -1,0 +1,16 @@
+s3:
+  enabled: true
+
+smtp:
+  # Active ou non l'installation du serveur SMTP
+  enabled: false
+
+  ingress:
+    enabled: true
+#    host: mailhog.example.com
+
+  auth:
+    enabled: true
+    existingSecret: ""
+    fileName: auth.txt
+    fileContents: "Ym9iOiQyYSQwNCRRN1VwdmQvWUlwck5DcExsUHpFQ2VlRnZrVlI1RVhKbG1uZjZ4S050ZHlXSnJoeW1hNUhlaQ==" # format user:password (où password est bcrypted) le tout en base64
