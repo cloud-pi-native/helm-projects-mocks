@@ -7,7 +7,7 @@ smtp:
 
   ingress:
     enabled: true
-#    host: mailhog.example.com
+#    hostOverride: mailhog.example.com
 
   auth:
     enabled: true
