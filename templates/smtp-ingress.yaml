@@ -20,19 +20,15 @@ spec:
   ingressClassName: {{ .Values.smtp.ingress.ingressClassName }}
 {{- end }}
   rules:
-  {{- range .Values.smtp.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host:  {{ .Values.smtp.ingress.host }}
       http:
         paths:
-        {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: "/"
+            pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   name: http
-        {{- end }}
-  {{- end }}
 {{- end }}
 {{- end -}}
