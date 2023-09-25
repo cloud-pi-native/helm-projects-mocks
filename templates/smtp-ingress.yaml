@@ -20,7 +20,8 @@ spec:
   ingressClassName: {{ .Values.smtp.ingress.ingressClassName }}
 {{- end }}
   rules:
-    - host:  {{ .Values.smtp.ingress.host }}
+#    - host:  {{ .Values.smtp.ingress.host }}
+    - host:  {{ printf "%s%s" .Release.Namespace "-mails.dev.numerique-interieur.com" }}
       http:
         paths:
           - path: "/"
