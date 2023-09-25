@@ -50,17 +50,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "mailhog.serviceAccountName" -}}
-{{- if .Values.smtp.serviceAccount.create }}
-{{- default (include "mailhog.fullname" .) .Values.smtp.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.smtp.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create the name for the auth secret.
 */}}
 {{- define "mailhog.authFileSecret" -}}
