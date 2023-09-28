@@ -9,6 +9,6 @@ spec:
   selector:
     app: whoami
   ports:
-    - port: 80
+    - port: 8080
 {{- end -}}
 {{- end -}}

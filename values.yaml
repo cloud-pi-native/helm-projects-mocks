@@ -110,11 +110,11 @@ passage2:
     proxy:
       rules: |-
         # App demo
-        ProxyPass /whoami "http://whoami-svc:80/"
-        ProxyPassReverse /whoami "http://whoami-svc:80"
+        ProxyPass /whoami "http://whoami-svc:8080/"
+        ProxyPassReverse /whoami "http://whoami-svc:8080"
         #Example
-        ProxyPass /my-service2 "http://whoami3-svc:80/"
-        ProxyPassReverse /my-service2 "http://whoami3-svc:80"
+        ProxyPass /my-service2 "http://whoami3-svc:8080/"
+        ProxyPassReverse /my-service2 "http://whoami3-svc:8080"
 
   mockpassage2:
     service: 

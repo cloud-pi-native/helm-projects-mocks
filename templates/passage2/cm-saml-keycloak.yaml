@@ -6,6 +6,7 @@ metadata:
 data:
   fetch-saml.sh: |
     #!/bin/sh
+    echo "curl -d 'client_id=admin-cli' -d "scope=openid" -d "username=$KEYCLOAK_ADMIN" -d "password=$KEYCLOAK_ADMIN_PASSWORD" -d 'grant_type=password' 'https://{{ .Values.passage2.mockpassage2.hostname }}/realms/master/protocol/openid-connect/token' | jq -r .access_token"
     BEARER=`curl -d 'client_id=admin-cli' -d "scope=openid" -d "username=$KEYCLOAK_ADMIN" -d "password=$KEYCLOAK_ADMIN_PASSWORD" -d 'grant_type=password' 'https://{{ .Values.passage2.mockpassage2.hostname }}/realms/master/protocol/openid-connect/token' | jq -r .access_token`
     curl 'https://{{ .Values.passage2.mockpassage2.hostname }}/admin/realms/papassage/clients/6fc4401a-b834-4a27-8f46-aff8eedbfc88/installation/providers/mod-auth-mellon' -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0' -H 'Accept: */*' -H 'Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3' -H 'Accept-Encoding: gzip, deflate, br' -H "Authorization: Bearer $BEARER" -H 'Connection: keep-alive' -o /saml/saml.zip
     cd /saml/ && unzip /saml/saml.zip
