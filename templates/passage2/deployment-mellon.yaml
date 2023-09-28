@@ -36,7 +36,7 @@ spec:
             - mountPath: /saml
               name: saml
       containers:
-        - image: {{- .Values.passage2.reverseproxy.image -}}
+        - image: {{ .Values.passage2.reverseproxy.image }}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
