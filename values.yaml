@@ -106,7 +106,7 @@ passage2:
     service:
       name: rpa-svc
       port: 8080
-    hostname: mellon.example.com
+    hostname: monprojet-rpa.dev.numerique-interieur.com
     proxy:
       rules: |-
         # custom rules
@@ -119,5 +119,5 @@ passage2:
     service: 
       name: saml-keycloak-svc
       port: 8080
-    hostname: passage2.example.com
+    hostname: monprojet-passage2.dev.numerique-interieur.com
     adminLogin: admin
