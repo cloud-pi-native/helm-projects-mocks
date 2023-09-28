@@ -19,6 +19,17 @@ spec:
         - name: init-saml
           image: praqma/network-multitool
           command: ["sh", "/scripts/fetch-saml.sh"]
+          env:
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  name: passage2-keycloak-auth
+                  key: keycloak-admin-login
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passage2-keycloak-auth
+                  key: keycloak-password
           volumeMounts:
             - mountPath: /scripts
               name: saml-keycloak

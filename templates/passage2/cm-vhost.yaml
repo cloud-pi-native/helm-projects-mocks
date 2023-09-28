@@ -27,9 +27,6 @@ data:
             RewriteEngine on
         </IfModule>
 
-        ProxyPass /kc "http://{{ .Values.passage2.mockpassage2.service.name }}:{{ .Values.passage2.mockpassage2.service.port }}/"
-        ProxyPassReverse /kc "http://{{ .Values.passage2.mockpassage2.service.name }}:{{ .Values.passage2.mockpassage2.service.port }}"
-
         {{ .Values.passage2.reverseproxy.proxy.rules | indent 8}}
 
         <Location />
