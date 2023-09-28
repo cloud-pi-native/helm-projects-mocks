@@ -13,7 +13,7 @@ data:
         ServerAlias *
         UseCanonicalName Off
         #Niveau de verbosite
-        LogLevel debug    
+        LogLevel info    
 
         <Files *.sh>
             SetHandler cgi-script

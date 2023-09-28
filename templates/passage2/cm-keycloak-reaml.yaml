@@ -694,7 +694,7 @@ data:
             "saml.force.post.binding": "true",
             "saml.encrypt": "true",
             "post.logout.redirect.uris": "*",
-            "saml_assertion_consumer_url_post": "http://{{ .Values.passage2.reverseproxy.hostname }}/mellon/postResponse",
+            "saml_assertion_consumer_url_post": "https://{{ .Values.passage2.reverseproxy.hostname }}/mellon/postResponse",
             "saml.server.signature": "true",
             "saml_idp_initiated_sso_url_name": "papassage",
             "saml.server.signature.keyinfo.ext": "false",
