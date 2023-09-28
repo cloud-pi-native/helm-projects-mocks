@@ -109,9 +109,10 @@ passage2:
     hostname: monprojet-rpa.dev.numerique-interieur.com
     proxy:
       rules: |-
-        # custom rules
-        ProxyPass /my-service1 "http://whoami2-svc:80/"
-        ProxyPassReverse /my-service1 "http://whoami2-svc:80"
+        # App demo
+        ProxyPass /whoami "http://whoami-svc:80/"
+        ProxyPassReverse /whoami "http://whoami-svc:80"
+        #Example
         ProxyPass /my-service2 "http://whoami3-svc:80/"
         ProxyPassReverse /my-service2 "http://whoami3-svc:80"
 
@@ -122,3 +123,5 @@ passage2:
     hostname: monprojet-passage2.dev.numerique-interieur.com
     adminLogin: admin
     adminPassword: OZJFejfrejijIZJijfeij
+  demoApp:
+    enabled: false
