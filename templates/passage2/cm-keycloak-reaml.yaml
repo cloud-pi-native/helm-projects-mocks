@@ -2296,5 +2296,22 @@ data:
       "clientPolicies": {
         "policies": []
       }
+      "users": [
+        {
+          "username": "test",
+          "enabled": true,
+          "emailVerified": true,
+          "firstName": "test",
+          "lastName": "test",
+          "email": "test@test.com",
+          "credentials": [
+            {
+              "type": "password",
+              "value": "test"
+            }
+          ],
+        }
+      ]
+
     }
 {{- end -}}
