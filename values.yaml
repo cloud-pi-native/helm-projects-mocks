@@ -102,6 +102,7 @@ smtp:
 passage2:
   enabled: true
   reverseproxy:
+    image: jaubertaot/rpa:passage2
     service:
       name: rpa-svc
       port: 8080
