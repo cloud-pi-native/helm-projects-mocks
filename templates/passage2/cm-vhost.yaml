@@ -9,7 +9,7 @@ data:
     # MellonDiagnosticFile /opt/bitnami/apache2/logs/mellon_diagnostics
     <VirtualHost *:8080>
 
-        ServerName mysaml.example.com
+        ServerName https://{{ .Values.passage2.reverseproxy.hostname }}
         ServerAlias *
         UseCanonicalName Off
         #Niveau de verbosite
