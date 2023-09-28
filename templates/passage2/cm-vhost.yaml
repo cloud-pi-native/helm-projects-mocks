@@ -1,0 +1,67 @@
+{{- if .Values.passage2.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vhost-passage
+data:
+  vhost-passage.conf: |
+    # MellonDiagnosticEnable On
+    # MellonDiagnosticFile /opt/bitnami/apache2/logs/mellon_diagnostics
+    <VirtualHost *:8080>
+
+        ServerName mysaml.example.com
+        ServerAlias *
+        UseCanonicalName Off
+        #Niveau de verbosite
+        LogLevel debug    
+
+        <Files *.sh>
+            SetHandler cgi-script
+        </Files>
+
+        <IfModule mod_dir.c>
+            DirectoryIndex index.pl index.html
+        </IfModule>
+
+        <IfModule mod_rewrite.c>
+            RewriteEngine on
+        </IfModule>
+
+        ProxyPass /kc "http://{{ .Values.passage2.mockpassage2.service.name }}:{{ .Values.passage2.mockpassage2.service.port }}/"
+        ProxyPassReverse /kc "http://{{ .Values.passage2.mockpassage2.service.name }}:{{ .Values.passage2.mockpassage2.service.port }}"
+
+        {{ .Values.passage2.reverseproxy.proxy.rules | indent 8}}
+
+        <Location />
+          Require valid-user
+          AuthType "Mellon"
+          MellonEnable "auth"
+          MellonSetEnv "e-mail" "mail"
+          MellonMergeEnvVars On
+          MellonMergeEnvVars On ","
+          MellonEnvVarsSetCount On
+          MellonSessionDump On
+          MellonSamlResponseDump On
+          MellonEndpointPath "/mellon"
+          MellonDefaultLoginPath "/"
+          MellonSamlResponseDump On
+          MellonSessionDump On
+          MellonRedirectDomains [self]
+          MellonSPMetadataFile /saml/papassage/sp-metadata.xml
+          MellonSPPrivateKeyFile /scripts/key.pem
+          MellonSPCertFile /scripts/cert.pem
+          MellonIdpMetadataFile /saml/papassage/idp-metadata.xml
+          MellonIdPPublicKeyFile /scripts/cert.pem
+
+          RequestHeader set Mellon-NameID %{MELLON_NAME_ID}e
+          Header set Mellon-NameID %{MELLON_NAME_ID}e
+
+          RequestHeader set Mellon-Groups %{MELLON_groups}e
+          Header set Mellon-Groups %{MELLON_groups}e
+
+          RequestHeader set Mellon-Role %{MELLON_Role}e
+          Header set Mellon-Role %{MELLON_Role}e
+
+        </Location>
+    </VirtualHost>
+{{- end -}}

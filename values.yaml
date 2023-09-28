@@ -99,3 +99,24 @@ smtp:
     requests:
       cpu: 100m
       memory: 64Mi
+passage2:
+  enabled: true
+  reverseproxy:
+    service:
+      name: rpa-svc
+      port: 8080
+    hostname: mellon.example.com
+    proxy:
+      rules: |-
+        # custom rules
+        ProxyPass /my-service1 "http://whoami2-svc:80/"
+        ProxyPassReverse /my-service1 "http://whoami2-svc:80"
+        ProxyPass /my-service2 "http://whoami3-svc:80/"
+        ProxyPassReverse /my-service2 "http://whoami3-svc:80"
+
+  mockpassage2:
+    service: 
+      name: saml-keycloak-svc
+      port: 8080
+    hostname: passage2.example.com
+    adminLogin: admin

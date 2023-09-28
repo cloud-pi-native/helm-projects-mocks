@@ -14,3 +14,19 @@ smtp:
     existingSecret: ""
     fileName: auth.txt
     fileContents: "Ym9iOiQyYSQwNCRRN1VwdmQvWUlwck5DcExsUHpFQ2VlRnZrVlI1RVhKbG1uZjZ4S050ZHlXSnJoeW1hNUhlaQ==" # format user:password (où password est bcrypted) le tout en base64
+
+passage2:
+  enabled: true
+  reverseproxy:
+    hostname: mellon.example.com
+    proxy:
+      rules: |-
+        # custom rules
+        ProxyPass /my-service1 "http://whoami2-svc:80/"
+        ProxyPassReverse /my-service1 "http://whoami2-svc:80"
+        ProxyPass /my-service2 "http://whoami3-svc:80/"
+        ProxyPassReverse /my-service2 "http://whoami3-svc:80"
+
+  mockpassage2:
+    hostname: passage2.example.com
+    adminLogin: admin

@@ -1,0 +1,14 @@
+{{- if .Values.passage2.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.passage2.reverseproxy.service.name }}
+spec:
+  type: ClusterIP
+  selector:
+    app: rpa
+  ports:
+    - name: http
+      port: {{ .Values.passage2.reverseproxy.service.port }}
+      targetPort: 8080
+{{- end -}}

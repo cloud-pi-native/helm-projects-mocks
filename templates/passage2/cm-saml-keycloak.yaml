@@ -1,0 +1,79 @@
+{{- if .Values.passage2.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: saml-keycloak
+data:
+  fetch-saml.sh: |
+    #!/bin/sh
+    BEARER=`curl -d 'client_id=admin-cli' -d "scope=openid" -d 'username=admin' -d 'password=K6eXuh4H4kgbcQ==' -d 'grant_type=password' 'https://keycloak.apps.c6.numerique-interieur.com/realms/master/protocol/openid-connect/token' | jq -r .access_token`
+    curl 'https://keycloak.apps.c6.numerique-interieur.com/admin/realms/papassage/clients/6fc4401a-b834-4a27-8f46-aff8eedbfc88/installation/providers/mod-auth-mellon' -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0' -H 'Accept: */*' -H 'Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3' -H 'Accept-Encoding: gzip, deflate, br' -H "Authorization: Bearer $BEARER" -H 'Connection: keep-alive' -o /saml/saml.zip
+    cd /saml/ && unzip /saml/saml.zip
+    chmod -R 777 /saml/*
+    exit 0
+  cert.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIID0zCCAjsCFGbhGvVPI3jU+xETkq6OFxWRHXtTMA0GCSqGSIb3DQEBCwUAMCYx
+    JDAiBgNVBAMMG3JwYS0xMjctMC0wLTEueGlwLmxoam1tYy5jbjAeFw0yMzA5Mjcx
+    MjQwMjNaFw0zMzA5MjYxMjQwMjNaMCYxJDAiBgNVBAMMG3JwYS0xMjctMC0wLTEu
+    eGlwLmxoam1tYy5jbjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBALDS
+    XsBzuCwZCu++Bcb01xynMNIAYj7d+ywx44oZZmLWrnQFvrSzcpvK3pcxvTf8REsr
+    7omK0mdBWnhVvVlvXyretVAUvT/RbWjWMDJS+2bZZd6Sk80/i8y/IZIsMLqacCq5
+    emiXamMCSoPQv7o+VmOeBrqTEgxm6Oz002E7pu2a53g4s3BtxW+7w+DHww4xtfSt
+    nKLrYtLbJTJX7WZUI2al0BmY9Kcm+WWezcMv/7/QlMsa4HQbbXGGikPJq9B1vVnP
+    EXpK5c21so4C7xxHo138kzNZc4Yl8bOaxU/e0kTRIrRZxdD/PfxaonmJyfTN4RxG
+    iw2+pP4Pkz20xrnoraN1mp8P3WuOmi/kTON0BGoHYqmq/4+kP6b485973heb08t0
+    0njNYVT/8pdk7TsY4nK6A0q11fiK5wWV9K09vhiI5x1cdFdMs7bKUc6nnaL8zCUI
+    abBEXNQ8D1sV4o5WQPxKvuGnU0VsCPyevPW1GDVj64aAQ0iZcjy+6QuYvaihJwID
+    AQABMA0GCSqGSIb3DQEBCwUAA4IBgQCHQifsDJnJJ/S5CG6WZXRPzW/VJcWPwyfP
+    6XlpwX+JS7CoPFQD7/VfSXTuyQVN0pksOULAyvXhMOMgnCNJ4YS8SjDQevARGh8w
+    oPv1NIAW1JavdI9yMqQaadOOHGFu+S5czm9areOqM02PNU6lzcLOeGIL1fKESpnF
+    t6PUcyYpGfuPfiFe820ABEepze7HBS0Tp021zXd6r7aHSyv6n0/puFg0N/ygrZt0
+    0SDPr7jppkXSLVgzwLi1in4lm7W0YZmgToaoYV7vtCknZA58GIJzBytZYPl8/mkj
+    8lbHnyZ/5vfuYB+DoixAdB86jrJA3atX9Lu3R0R0qn8obtoFZw/Mi/OFAoUEoMij
+    uHvSQ3gHqxSNsVoMBHLB8TenYBfgxt/b2VVe7dUip5RK5ezJoGbEPT54MJ4tHOlJ
+    JY4irZVNI14zhuQ07O0nTJD8eaOAyXgSH7gkynf9iA5eEiEO+oaoKBOuwxKwVv4z
+    h5rq9u0JohD8IJN5IcAjZe+OhjF5iwk=
+    -----END CERTIFICATE-----
+  key.pem: |
+    -----BEGIN PRIVATE KEY-----
+    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
+    EzU2eV1XjzvQIh2zB8aSGxA=
+    -----END PRIVATE KEY-----
+{{- end -}}

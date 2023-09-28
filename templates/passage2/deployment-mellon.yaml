@@ -1,0 +1,63 @@
+{{- if .Values.passage2.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rpa
+  name: rpa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rpa
+  template:
+    metadata:
+      labels:
+        app: rpa
+    spec:
+      initContainers:
+        - name: init-saml
+          image: praqma/network-multitool
+          command: ["sh", "/scripts/fetch-saml.sh"]
+          volumeMounts:
+            - mountPath: /scripts
+              name: saml-keycloak
+            - mountPath: /saml
+              name: saml
+      containers:
+        - image: rpa:2
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          name: httpd
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - mountPath: /scripts
+              name: saml-keycloak
+            - mountPath: /saml
+              name: saml
+            - mountPath: /opt/bitnami/apache/conf/httpd.conf
+              name: apache2-conf
+              subPath: httpd.conf
+            - mountPath: /opt/bitnami/apache/conf/vhosts
+              name: vhost-passage
+      volumes:
+        - emptyDir: {}
+          name: saml
+        - configMap:
+            name: apache2-conf
+          name: apache2-conf
+        - configMap:
+            name: vhost-passage
+          name: vhost-passage
+        - configMap:
+            name: saml-keycloak
+          name: saml-keycloak
+{{- end -}}
