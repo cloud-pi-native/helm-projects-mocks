@@ -108,12 +108,22 @@ passage2:
       port: 8080
     hostname: monprojet-rpa.dev.numerique-interieur.com
     proxy:
+      headers: |-
+        RequestHeader set Mellon-NameID %{MELLON_NAME_ID}e
+        Header set Mellon-NameID %{MELLON_NAME_ID}e
+
+        RequestHeader set Mellon-Groups %{MELLON_groups}e
+        Header set Mellon-Groups %{MELLON_groups}e
+
+        RequestHeader set Mellon-Role %{MELLON_Role}e
+        Header set Mellon-Role %{MELLON_Role}e
+
       rules: |-
         # App demo
-        ProxyPass /whoami "http://whoami-svc:8080/"
-        ProxyPassReverse /whoami "http://whoami-svc:8080"
+        ProxyPassMatch    "^/(.*)" "http://whoami-svc:8080/$1"
+        ProxyPassReverse  "^/(.*)" "http://whoami-svc:8080/$1"
         #Example
-        ProxyPass /my-service2 "http://whoami3-svc:8080/"
+        ProxyPass /my-service2 "http://whoami3-svc:8080"
         ProxyPassReverse /my-service2 "http://whoami3-svc:8080"
 
   mockpassage2:

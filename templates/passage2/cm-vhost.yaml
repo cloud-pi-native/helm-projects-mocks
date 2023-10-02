@@ -50,14 +50,7 @@ data:
           MellonIdpMetadataFile /saml/papassage/idp-metadata.xml
           MellonIdPPublicKeyFile /scripts/cert.pem
 
-          RequestHeader set Mellon-NameID %{MELLON_NAME_ID}e
-          Header set Mellon-NameID %{MELLON_NAME_ID}e
-
-          RequestHeader set Mellon-Groups %{MELLON_groups}e
-          Header set Mellon-Groups %{MELLON_groups}e
-
-          RequestHeader set Mellon-Role %{MELLON_Role}e
-          Header set Mellon-Role %{MELLON_Role}e
+          {{ .Values.passage2.reverseproxy.proxy.headers | indent 8}}
 
         </Location>
     </VirtualHost>
