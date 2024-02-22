@@ -3,12 +3,25 @@ minio:
   ingress:
     enabled: true
     hostname: minio-st.dso.numerique-interieur.com
-s3:
-  enabled: true
-  bucketName: my-bucket
-  bucketclass: noobaa-default-bucket-class
-  storageClassName: openshift-storage.noobaa.io
-
+  provisioning:
+    podSecurityContext:
+      enabled: false
+    containerSecurityContext:
+      enabled: false
+  volumePermissions:
+    containerSecurityContext:
+      runAsUser: "auto"
+  containerSecurityContext:
+    enabled: false
+  podSecurityContext:
+    enabled: false
+  resources:
+    requests:
+      cpu: 512m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
 smtp:
   # Active ou non l'installation du serveur SMTP
   enabled: true
