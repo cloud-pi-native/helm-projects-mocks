@@ -1,3 +1,5 @@
+minio:
+  enabled: true
 s3:
   enabled: true
   bucketName: my-bucket
