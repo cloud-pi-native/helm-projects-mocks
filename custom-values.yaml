@@ -1,5 +1,9 @@
-s3:
+minio:
   enabled: true
+  ingress:
+    enabled: true
+    hostname: minio-st.dso.numerique-interieur.com
+  defaultBuckets: "my-bucket-app, my-second-bucket"
 
 smtp:
   # Active ou non l'installation du serveur SMTP
