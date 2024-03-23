@@ -2,7 +2,10 @@ minio:
   enabled: true
   ingress:
     enabled: true
-    hostname: minio-st.dso.numerique-interieur.com
+    hostname: minio.dso.numerique-interieur.com
+  apiIngress:
+    enabled: true
+    hostname: api.minio.dso.numerique-interieur.com
   provisioning:
     podSecurityContext:
       enabled: false
