@@ -2295,7 +2295,7 @@ data:
       },
       "clientPolicies": {
         "policies": []
-      }
+      },
       "users": [
         {
           "username": "test",
