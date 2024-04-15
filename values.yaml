@@ -155,4 +155,4 @@ passage2:
     adminLogin: admin
     adminPassword: OZJFejfrejijIZJijfeij
   demoApp:
-    enabled: false
+    enabled: true 
