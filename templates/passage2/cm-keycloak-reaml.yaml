@@ -2293,9 +2293,6 @@ data:
       "clientProfiles": {
         "profiles": []
       },
-      "clientPolicies": {
-        "policies": []
-      },
       "users": [
         {
           "username": "test",
