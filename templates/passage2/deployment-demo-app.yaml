@@ -15,6 +15,7 @@ spec:
     metadata:
       labels:
         app: whoami
+        sidecar.istio.io/inject: true
     spec:
       containers:
         - image: traefik/whoami:latest
