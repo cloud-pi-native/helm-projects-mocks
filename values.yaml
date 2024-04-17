@@ -46,6 +46,13 @@ krakend:
     requests:
       cpu: 100m
       memory: 64Mi
+  extraVolumeMounts:
+    - name: krakend-tls
+      mountPath: "/etc/krakend/tls" 
+  extraVolumes:
+    - name: krakend-tls
+      secret:
+        secretName: krakend-tls
 
 smtp:
   # Active ou non l'installation du serveur SMTP
