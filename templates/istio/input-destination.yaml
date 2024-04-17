@@ -1,0 +1,29 @@
+{{- $globalRandom := uuidv4 -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: otls-{{ .Values.ines.name }}
+spec:
+  host: {{ .Values.ines.host }}
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: MUTUAL
+          credentialName: app-certs
+          sni: {{ .Values.ines.host }}
+---
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  name: sops-{{ .Values.ines.name }}
+spec:
+  secretTemplates:
+    - name: {{ .Release.Namespace }}
+      annotations:
+        kubed.appscode.com/sync: app=ines
+{{- .Values.ines.secretData | nindent 6 }}
+{{- .Values.ines.secretSops | nindent 0 }}

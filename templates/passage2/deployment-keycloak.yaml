@@ -39,10 +39,6 @@ spec:
               value: "true"
             - name: KC_PROXY
               value: "edge"
-          readinessProbe:
-            httpGet:
-              path: "/auth/realms/master"
-              port: 8080
           resources:
             requests:
               memory: "512Mi"

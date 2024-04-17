@@ -1,0 +1,45 @@
+{{- if not .Values.krakend.allInOneImage }}
+# This ConfigMap contains the initial configuration
+# file for the Krakend.io API Gateway.
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "krakend.fullname" . }}-config
+{{- if .Values.krakend.configFileSource }}
+binaryData:
+  {{ include "krakend.configFileName" . }}: |-
+{{ .Files.Get .Values.krakend.configFileSource | b64enc | indent 4}}
+{{- else }}
+
+data:
+  {{ include "krakend.configFileName" . }}: |
+{{- if .Values.krakend.config }}
+{{ .Values.krakend.config | indent 4 }}
+{{- else }}
+    {{`{
+        "$schema": "https://www.krakend.io/schema/v3.json",
+        "version": 3,
+        "name": "{{ env "SERVICE_NAME" }} ({{ .service.environment }})",
+        "port": `}}{{ .Values.service.targetPort }}{{`,
+        "timeout": "{{ .service.timeout }}",
+        "cache_ttl":  "{{ .service.cache_ttl }}",
+        "output_encoding": "{{ .service.output_encoding }}",
+        "plugin": {
+            "pattern":".so",
+            "folder": "/usr/lib/krakend/plugins/"
+        },
+        "endpoints": {{ include "endpoints.tmpl" }},
+        "tls": {
+          "public_key": "/etc/krakend/tls/krakend.crt",
+          "private_key": "/etc/krakend/tls/krakend.key",
+          "enable_mtls": true,
+          "ca_certs": [
+               "./rootCA.pem",
+               "/etc/krakend/tls/ca-app.crt"
+            ]
+        },
+        "extra_config": `}}{{ .Values.krakend.extraConfig | toJson }}{{`
+    }`}}
+{{- end }}
+{{- end }}
+{{- end }}

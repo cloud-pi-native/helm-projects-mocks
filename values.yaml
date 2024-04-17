@@ -25,6 +25,28 @@ minio:
     limits:
       cpu: 1
       memory: 1024Mi
+
+krakend:
+  image:
+    repository: devopsfaith/krakend
+    tag: "2.6.1"
+  ingress:
+    enabled: true
+    hosts:
+      - host: apigw.dev.numerique-interieur.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+  securityContext:
+    runAsUser: 1000750000
+  resources: 
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
 smtp:
   # Active ou non l'installation du serveur SMTP
   enabled: true
