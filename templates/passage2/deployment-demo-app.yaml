@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app: whoami
-        sidecar.istio.io/inject: true
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
-        - image: traefik/whoami:latest
+        - image: traefik/whoami:v1.10
           name: whoami
           ports:
             - containerPort: 8080
@@ -32,5 +32,8 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "250m"
+      serviceAccount: istio-sa
+      securityContext:
+        runAsUser: 1336
 {{- end -}}
 {{- end -}}
