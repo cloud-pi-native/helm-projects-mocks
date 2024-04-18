@@ -4,26 +4,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: whoami
-  name: whoami
+    app: debug-tools
+  name: debug-tools
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: whoami
+      app: debug-tools
   template:
     metadata:
       labels:
-        app: whoami
+        app: debug-tools
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
-        - image: traefik/whoami:v1.10
-          name: whoami
-          ports:
-            - containerPort: 8080
-          env:
-            - name: WHOAMI_PORT_NUMBER
-              value: "8080"
+        - image: nicolaka/netshoot
+          command: ["sleep"] 
+          args: ["infinity"]
+          name: debug-tools
           resources:
             requests:
               memory: "64Mi"
@@ -31,5 +29,8 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "250m"
+      serviceAccount: istio-sa
+      securityContext:
+        runAsUser: 1336
 {{- end -}}
 {{- end -}}
