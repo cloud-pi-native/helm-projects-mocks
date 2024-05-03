@@ -28,10 +28,10 @@ minio:
 
 krakend:
   image:
-    repository: devopsfaith/krakend
+    repository: hanaura26/krakend
     tag: "2.6.1"
   ingress:
-    enabled: true
+    enabled: false
     hosts:
       - host: apigw.dev.numerique-interieur.com
         paths:
@@ -46,6 +46,41 @@ krakend:
     requests:
       cpu: 100m
       memory: 64Mi
+  livenessProbe:
+    httpGet: null
+    exec:
+      command:
+      - curl
+      - --cacert
+      - /etc/krakend/rootCA.pem
+      - --cert 
+      - /etc/krakend/tls.crt
+      - --key
+      - /etc/krakend/tls.key
+      - https://krakend:80/__health
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    httpGet: null 
+    exec:
+      command:
+      - curl
+      - --cacert
+      - /etc/krakend/rootCA.pem
+      - --cert 
+      - /etc/krakend/tls.crt
+      - --key
+      - /etc/krakend/tls.key
+      - https://krakend:80/__health
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  extraVolumes:
+    - name: krakend-certs
+      secret:
+        secretName: krakend-internal-certificates
+  extraVolumeMounts:
+    - mountPath: /etc/krakend/
+      name: krakend-certs
 
 ines:
   name: ines-myproject-dev
