@@ -1,4 +1,5 @@
 minio:
+  fullnameOverride: "minio"
   enabled: true
   ingress:
     enabled: true
@@ -27,6 +28,7 @@ minio:
       memory: 1024Mi
 
 krakend:
+  fullnameOverride: "krakend"
   image:
     repository: hanaura26/krakend
     tag: "2.6.1"
@@ -122,7 +124,7 @@ smtp:
     pullPolicy: IfNotPresent
 
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: "smtp"
 
   containerPort:
     http:
