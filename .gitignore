@@ -3,3 +3,5 @@ Chart.lock
 test.yml
 test-values.yaml
 generated*
+scripts/certs-client/
+scripts/certs-server/

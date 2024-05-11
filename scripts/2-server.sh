@@ -18,7 +18,7 @@ fi
 echo -e "\n ${GREEN} --------- [Beginning of the Script] --------- ${NC}"
 
 
-mkdir server-certs
+mkdir certs-server
 
 echo -e "\n ${YELLOW} --------- Generate a key for the server certificate --------- ${NC}"
 openssl genrsa -out krakend-server.key 2048
@@ -30,8 +30,8 @@ echo -e "\n ${YELLOW} --------- Sign the certificate request for the server ----
 openssl x509 -req -in krakend-server.csr -extensions server -CA certs-client/client-rootCA.pem -CAkey certs-client/client-rootCA.key -CAcreateserial -out krakend-server.crt -days 500 -sha256
 
 echo -e "\n ${YELLOW} --------- Generate Kubernetes krakend secret --------- ${NC}"
-kubectl create secret generic krakend-tls --from-file=certs-client/client-rootCA.pem --from-file=krakend-server.crt --from-file=krakend-server.key --dry-run=client -oyaml > krakend-tls-secret.yaml
+kubectl create secret generic krakend-tls-secret --from-file=certs-client/client-rootCA.pem --from-file=krakend-server.crt --from-file=krakend-server.key --dry-run=client -oyaml > krakend-tls-secret.yaml
 
-mv krakend* server-certs/
+mv krakend* certs-server/
 
 echo -e "\n  ${GREEN}--------- [End of the Script] --------- ${NC}"

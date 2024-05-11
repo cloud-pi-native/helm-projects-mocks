@@ -32,13 +32,6 @@ krakend:
   image:
     repository: hanaura26/krakend
     tag: "2.6.1"
-  ingress:
-    enabled: false
-    hosts:
-      - host: apigw.dev.numerique-interieur.com
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
   securityContext:
     runAsUser: 1000750000
   resources: 
@@ -54,11 +47,11 @@ krakend:
       command:
       - curl
       - --cacert
-      - /etc/krakend/rootCA.pem
+      - /etc/krakend/client-rootCA.pem
       - --cert 
-      - /etc/krakend/tls.crt
+      - /etc/krakend/krakend-server.crt
       - --key
-      - /etc/krakend/tls.key
+      - /etc/krakend/krakend-server.key
       - https://krakend:80/__health
     initialDelaySeconds: 30
     periodSeconds: 10
@@ -68,18 +61,18 @@ krakend:
       command:
       - curl
       - --cacert
-      - /etc/krakend/rootCA.pem
+      - /etc/krakend/client-rootCA.pem
       - --cert 
-      - /etc/krakend/tls.crt
+      - /etc/krakend/krakend-server.crt
       - --key
-      - /etc/krakend/tls.key
+      - /etc/krakend/krakend-server.key
       - https://krakend:80/__health
     initialDelaySeconds: 30
     periodSeconds: 10
   extraVolumes:
     - name: krakend-certs
       secret:
-        secretName: krakend-internal-certificates
+        secretName: krakend-tls-secret
   extraVolumeMounts:
     - mountPath: /etc/krakend/
       name: krakend-certs
