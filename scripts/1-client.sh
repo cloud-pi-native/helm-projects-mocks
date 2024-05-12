@@ -10,7 +10,7 @@ NC='\033[0m' # No Color
 
 
 ## Check if verbose mode is activated ##
-if [[ "$1" == "-v" ]]; then
+if [[ "$0" == "-v" ]]; then
     set -x  
 fi
 
