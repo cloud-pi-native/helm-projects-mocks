@@ -41,6 +41,30 @@ krakend:
     requests:
       cpu: 100m
       memory: 64Mi
+  templates:
+    krakend.tmpl: |-
+      {   
+        "$schema": "https://www.krakend.io/schema/v3.json",
+        "version": 3,
+        "endpoints": {{ include "endpoints.tmpl" }}, 
+        "tls": {
+          "public_key": "/etc/krakend/krakend-server.crt",
+          "private_key": "/etc/krakend/krakend-server.key",
+          "enable_mtls": true,
+          "ca_certs": [
+            "/etc/krakend/client-rootCA.pem"
+          ],  
+          "disable_system_ca_pool": true
+        },  
+        "extra_config": {
+          "telemetry/logging": {
+            "level": "DEBUG",
+            "prefix": "[KRAKEND]",
+            "syslog": false,
+            "stdout": true
+          }   
+        }   
+      }         
   livenessProbe:
     httpGet: null
     exec:
