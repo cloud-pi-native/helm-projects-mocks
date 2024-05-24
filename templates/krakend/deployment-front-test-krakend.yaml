@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: front-test-krakend
+  name: front-test-krakend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-test-krakend
+  template:
+    metadata:
+      labels:
+        app: front-test-krakend
+    spec:
+      containers:
+      - image: harbor.apps.c6.numerique-interieur.com/front-test-krakend
+        name: front-test-krakend
+        command: ["node", "server.js"]
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000750000
+        volumeMounts:
+        - mountPath: /certs
+          name: krakend-client-certs
+      volumes:
+      - name: krakend-client-certs
+        secret:
+          secretName: krakend-client-tls-secret
+

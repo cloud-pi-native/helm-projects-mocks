@@ -41,6 +41,53 @@ krakend:
     requests:
       cpu: 100m
       memory: 64Mi
+  partials:
+    input_headers.tmpl: |-
+      "input_headers": [
+        "Content-Type",
+        "ClientId"
+      ]
+    rate_limit_backend.tmpl: |-
+      "qos/ratelimit/proxy": {
+        "max_rate": 0.5,
+        "capacity": 1
+      }
+    endpoints.tmpl: |-
+      [
+        {
+          "endpoint": "/test",
+          "method": "GET",
+          "backend": [
+              {
+                  "method": "GET",
+                  "host": [],
+                  "url_pattern": "/__debug/roots",
+                  "encoding": "json",
+                  "deny": [
+                      "message"
+                  ]
+              }
+          ],
+          "extra_config": {
+              "proxy": {
+                  "static": {
+                      "data": {
+                          "ministere-interieur": [
+                              {
+                                  "base-de-donnees": [
+                                      "donnee-1"
+                                  ]
+                              }
+                          ],
+                          "version": "2024"
+                      },
+                      "strategy": "always"
+                  }
+              }
+          },
+          "output_encoding": "json"
+        }
+      ]
   templates:
     krakend.tmpl: |-
       {   
