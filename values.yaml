@@ -30,8 +30,8 @@ minio:
 krakend:
   fullnameOverride: "krakend"
   image:
-    repository: hanaura26/krakend
-    tag: "2.6.1"
+    repository: harbor.apps.c6.numerique-interieur.com/mi-mocks/krakend
+    tag: "main"
   securityContext:
     runAsUser: 1000750000
   resources: 

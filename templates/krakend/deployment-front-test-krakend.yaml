@@ -15,7 +15,7 @@ spec:
         app: front-test-krakend
     spec:
       containers:
-      - image: harbor.apps.c6.numerique-interieur.com/front-test-krakend
+      - image: harbor.apps.c6.numerique-interieur.com/mi-mocks/front-test-krakend:main
         name: front-test-krakend
         command: ["node", "server.js"]
         ports:
@@ -35,6 +35,8 @@ spec:
         volumeMounts:
         - mountPath: /certs
           name: krakend-client-certs
+      imagePullSecrets:
+        - name: registry-pull-secret
       volumes:
       - name: krakend-client-certs
         secret:
