@@ -24,4 +24,4 @@ dependencies:
 - name: krakend
   version: v0.1.16
   repository: "https://helm.equinixmetal.com"
-
+  condition: krakend.enabled

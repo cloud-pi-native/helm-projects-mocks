@@ -28,6 +28,7 @@ minio:
       memory: 1024Mi
 
 krakend:
+  enabled: true
   fullnameOverride: "krakend"
   image:
     repository: harbor.apps.c6.numerique-interieur.com/mi-mocks/krakend
