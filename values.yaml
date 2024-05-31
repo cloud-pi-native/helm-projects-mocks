@@ -44,77 +44,78 @@ krakend:
     requests:
       cpu: 100m
       memory: 64Mi
-  partials:
-    input_headers.tmpl: |-
-      "input_headers": [
-        "Content-Type",
-        "ClientId"
-      ]
-    rate_limit_backend.tmpl: |-
-      "qos/ratelimit/proxy": {
-        "max_rate": 0.5,
-        "capacity": 1
-      }
-    endpoints.tmpl: |-
-      [
-        {
-          "endpoint": "/test",
-          "method": "GET",
-          "backend": [
-              {
-                  "method": "GET",
-                  "host": [],
-                  "url_pattern": "/__debug/roots",
-                  "encoding": "json",
-                  "deny": [
-                      "message"
-                  ]
-              }
-          ],
-          "extra_config": {
-              "proxy": {
-                  "static": {
-                      "data": {
-                          "ministere-interieur": [
-                              {
-                                  "base-de-donnees": [
-                                      "donnee-1"
-                                  ]
-                              }
-                          ],
-                          "version": "2024"
-                      },
-                      "strategy": "always"
-                  }
-              }
-          },
-          "output_encoding": "json"
+  krakend:
+    partials:
+      input_headers.tmpl: |-
+        "input_headers": [
+          "Content-Type",
+          "ClientId"
+        ]
+      rate_limit_backend.tmpl: |-
+        "qos/ratelimit/proxy": {
+          "max_rate": 0.5,
+          "capacity": 1
         }
-      ]
-  templates:
-    krakend.tmpl: |-
-      {   
-        "$schema": "https://www.krakend.io/schema/v3.json",
-        "version": 3,
-        "endpoints": {{ include "endpoints.tmpl" }}, 
-        "tls": {
-          "public_key": "/etc/krakend/krakend-server.crt",
-          "private_key": "/etc/krakend/krakend-server.key",
-          "enable_mtls": true,
-          "ca_certs": [
-            "/etc/krakend/client-rootCA.pem"
-          ],  
-          "disable_system_ca_pool": true
-        },  
-        "extra_config": {
-          "telemetry/logging": {
-            "level": "DEBUG",
-            "prefix": "[KRAKEND]",
-            "syslog": false,
-            "stdout": true
+      endpoints.tmpl: |-
+        [
+          {
+            "endpoint": "/test",
+            "method": "GET",
+            "backend": [
+                {
+                    "method": "GET",
+                    "host": [],
+                    "url_pattern": "/__debug/roots",
+                    "encoding": "json",
+                    "deny": [
+                        "message"
+                    ]
+                }
+            ],
+            "extra_config": {
+                "proxy": {
+                    "static": {
+                        "data": {
+                            "ministere-interieur": [
+                                {
+                                    "base-de-donnees": [
+                                        "donnee-1"
+                                    ]
+                                }
+                            ],
+                            "version": "2024"
+                        },
+                        "strategy": "always"
+                    }
+                }
+            },
+            "output_encoding": "json"
+          }
+        ]
+    templates:
+      krakend.tmpl: |-
+        {   
+          "$schema": "https://www.krakend.io/schema/v3.json",
+          "version": 3,
+          "endpoints": {{ include "endpoints.tmpl" }}, 
+          "tls": {
+            "public_key": "/etc/krakend/krakend-server.crt",
+            "private_key": "/etc/krakend/krakend-server.key",
+            "enable_mtls": true,
+            "ca_certs": [
+              "/etc/krakend/client-rootCA.pem"
+            ],  
+            "disable_system_ca_pool": true
+          },  
+          "extra_config": {
+            "telemetry/logging": {
+              "level": "DEBUG",
+              "prefix": "[KRAKEND]",
+              "syslog": false,
+              "stdout": true
+            }   
           }   
-        }   
-      }         
+        }         
       #  livenessProbe:
       #    httpGet: null
       #    exec:
