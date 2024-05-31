@@ -30,6 +30,8 @@ minio:
 krakend:
   enabled: true
   fullnameOverride: "krakend"
+  imagePullSecrets: 
+    - name: "registry-pull-secret"
   image:
     repository: harbor.apps.c6.numerique-interieur.com/mi-mocks/krakend
     tag: "main"
@@ -113,34 +115,34 @@ krakend:
           }   
         }   
       }         
-  livenessProbe:
-    httpGet: null
-    exec:
-      command:
-      - curl
-      - --cacert
-      - /etc/krakend/client-rootCA.pem
-      - --cert 
-      - /etc/krakend/krakend-server.crt
-      - --key
-      - /etc/krakend/krakend-server.key
-      - https://krakend:80/__health
-    initialDelaySeconds: 30
-    periodSeconds: 10
-  readinessProbe:
-    httpGet: null 
-    exec:
-      command:
-      - curl
-      - --cacert
-      - /etc/krakend/client-rootCA.pem
-      - --cert 
-      - /etc/krakend/krakend-server.crt
-      - --key
-      - /etc/krakend/krakend-server.key
-      - https://krakend:80/__health
-    initialDelaySeconds: 30
-    periodSeconds: 10
+      #  livenessProbe:
+      #    httpGet: null
+      #    exec:
+      #      command:
+      #      - curl
+      #      - --cacert
+      #      - /etc/krakend/client-rootCA.pem
+      #      - --cert 
+      #      - /etc/krakend/krakend-server.crt
+      #      - --key
+      #      - /etc/krakend/krakend-server.key
+      #      - https://krakend:80/__health
+      #    initialDelaySeconds: 30
+      #    periodSeconds: 10
+      #  readinessProbe:
+      #    httpGet: null 
+      #    exec:
+      #      command:
+      #      - curl
+      #      - --cacert
+      #      - /etc/krakend/client-rootCA.pem
+      #      - --cert 
+      #      - /etc/krakend/krakend-server.crt
+      #      - --key
+      #      - /etc/krakend/krakend-server.key
+      #      - https://krakend:80/__health
+      #    initialDelaySeconds: 30
+      #    periodSeconds: 10
   extraVolumes:
     - name: krakend-certs
       secret:
